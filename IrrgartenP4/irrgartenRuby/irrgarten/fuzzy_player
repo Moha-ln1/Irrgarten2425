@@ -1,0 +1,32 @@
+require_relative 'player'
+
+module Irrgarten
+    class FuzzyPlayer < Player
+        def initialize(original_player)
+        super(original_player.name, original_player.intelligence, original_player.strength)
+        copy_from(original_player)
+        end
+
+        def attack
+        super + Dice.intensity(@strength)
+        end
+
+        def defend(received_attack)
+        defense = Dice.intensity(@intelligence) + defensive_energy
+        if defense < received_attack
+            got_wounded
+            true
+        else
+            false
+        end
+        end
+
+        def move(preferred_direction, valid_moves)
+        Dice.preferred_direction(preferred_direction, valid_moves, @intelligence)
+        end
+
+        def to_s
+        "Fuzzy#{super}"
+        end
+    end
+end
